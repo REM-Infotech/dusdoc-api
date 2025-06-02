@@ -1,5 +1,5 @@
 from socketio import AsyncServer
-from socket.namespaces import DusdocNamespace
+from dusdoc_api.socket_dusdoc.namespaces import DusdocNamespace
 
 
 class DusdocSocketIO(AsyncServer):

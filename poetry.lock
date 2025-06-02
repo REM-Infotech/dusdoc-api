@@ -539,6 +539,21 @@ werkzeug = ">=3.0"
 dotenv = ["python-dotenv"]
 
 [[package]]
+name = "quart-cors"
+version = "0.8.0"
+description = "A Quart extension to provide Cross Origin Resource Sharing, access control, support"
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "quart_cors-0.8.0-py3-none-any.whl", hash = "sha256:62dc811768e2e1704d2b99d5880e3eb26fc776832305a19ea53db66f63837767"},
+    {file = "quart_cors-0.8.0.tar.gz", hash = "sha256:ac32c4931da6fba944e9e2d3f856f2db4fd82e3fb905a09646086780c221a118"},
+]
+
+[package.dependencies]
+quart = ">=0.15"
+
+[[package]]
 name = "quart-jwt-extended"
 version = "0.1.0"
 description = "Extended JWT integration with Quart"
@@ -644,4 +659,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13"
-content-hash = "e6a5d4f2e80657d2f04cf8fc943bcaaa93344391a42e910a21f668575ba7847e"
+content-hash = "062792781e349551efb65e9f9afd7d08deb143a0176a1c89187045475c7b0baf"
