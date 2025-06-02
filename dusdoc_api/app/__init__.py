@@ -1,10 +1,8 @@
 from quart import Quart
+import asyncio
+from dusdoc_api.app.routes import register_routes
 
 app = Quart(__name__)
 
-@app.route("/")
-async def hello():
-    return "Hello, Quart!"
 
-if __name__ == "__main__":
-    app.run()
+asyncio.run(register_routes(app))
