@@ -19,8 +19,6 @@ class DusdocSocketIO(AsyncServer):
         return "asyncio"
 
 
-sio = DusdocSocketIO(async_handlers=True, logger=True, json=None)
-
+sio = DusdocSocketIO(async_handlers=True, logger=True, json=None, async_mode="asyncio")
 sio.register_namespace(DusdocNamespace("/"))  # Register the custom namespace
-sio.async_mode = "asyncio"  # Set the async mode to asyncio
 sio.async_handlers = True  # Ensure async handlers are enabled

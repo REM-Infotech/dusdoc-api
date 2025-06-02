@@ -1,6 +1,5 @@
 from quart import Blueprint, jsonify, make_response
 from quart_jwt_extended import create_access_token
-from uuid import uuid5
 
 auth = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -11,11 +10,13 @@ async def login():
     Handle user login.
     """
 
+    username = "user"
+
     return await make_response(
         jsonify(
             {
                 "message": "Login successful",
-                "token": create_access_token(identity=str(uuid5())),
+                "token": create_access_token(identity=username),
             }
         ),
         200,

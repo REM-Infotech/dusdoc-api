@@ -2,8 +2,12 @@ from quart import Quart
 import asyncio
 from dusdoc_api.app.routes import register_routes
 from quart_jwt_extended import JWTManager
+from uuid import uuid4
 
 app = Quart(__name__)
+
+app.config["JWT_SECRET_KEY"] = uuid4().hex  # Use a random secret key for JWT
+
 jwt = JWTManager(app)
 
 
