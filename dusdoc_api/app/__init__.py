@@ -1,8 +1,10 @@
 from quart import Quart
 import asyncio
 from dusdoc_api.app.routes import register_routes
+from quart_jwt_extended import JWTManager
 
 app = Quart(__name__)
+jwt = JWTManager(app)
 
 
 @app.after_request
