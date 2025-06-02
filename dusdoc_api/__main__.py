@@ -1,6 +1,6 @@
 import uvicorn
 from socketio import ASGIApp
-from dusdoc_api.socketio import sio
+from dusdoc_api.socket import sio
 from dusdoc_api.app import app
 
 if __name__ == "__main__":
