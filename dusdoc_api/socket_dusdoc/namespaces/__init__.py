@@ -1,41 +1,10 @@
 from socketio import AsyncNamespace
 
+session = set()
+
 
 class DusdocNamespace(AsyncNamespace):
-    def is_asyncio_based(self):
-        return True
-
-    async def trigger_event(self, event, *args):
-        """Dispatch an event to the proper handler method."""
-        return await self.trigger_event(event, *args)
-
-    async def emit(
-        self,
-        event,
-        data=None,
-        to=None,
-        room=None,
-        skip_sid=None,
-        namespace=None,
-        callback=None,
-        ignore_queue=False,
-    ):
-        """Emit a custom event to one or more connected clients."""
-        return await self.emit(
-            event,
-            data=data,
-            to=to,
-            room=room,
-            skip_sid=skip_sid,
-            namespace=namespace or self.namespace,
-            callback=callback,
-            ignore_queue=ignore_queue,
-        )
-
-    async def on_connect(self, sid, environ):
-        """Handle a new client connection."""
-        return await self.on_connect(sid, environ)
-
-    async def on_get_status(self, sid):
+    async def on_get_status_system(self, sid, *args, **kwargs):
         """Handle a request for the status of the server."""
-        return await self.on_get_status(sid)
+        await self.emit("status", dict(sid=sid))
+        return await self.get_session(sid)
