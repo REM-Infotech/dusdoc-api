@@ -1,6 +1,6 @@
 import re
 
-from quart import Quart
+from quart import Quart, jsonify
 from quart_cors import cors
 from quart_jwt_extended import JWTManager
 from quart_socketio import SocketIO
@@ -8,6 +8,11 @@ from quart_socketio import SocketIO
 app = Quart(__name__)
 jwt = JWTManager(app)
 io = SocketIO()
+
+
+@app.route("/", methods=["GET", "POST"])
+async def test():
+    return jsonify(ok="ok")
 
 
 def cors_allowed_origins(orig: str | None = None):
