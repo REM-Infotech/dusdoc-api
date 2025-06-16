@@ -574,6 +574,30 @@ Werkzeug = ">=2.2.0"
 asymmetric-crypto = ["cryptography (>=35.0.0)"]
 
 [[package]]
+name = "quart-socketio"
+version = "1.0.0.dev0"
+description = "Async Socket.IO integration for Quart applications"
+optional = false
+python-versions = ">=3.12"
+groups = ["main"]
+files = []
+develop = false
+
+[package.dependencies]
+python-socketio = ">=5.12.0"
+quart = "*"
+uvicorn = ">=0.34.3,<0.35.0"
+
+[package.extras]
+docs = ["sphinx"]
+
+[package.source]
+type = "git"
+url = "https://github.com/Robotz213/Quart-SocketIO.git"
+reference = "HEAD"
+resolved_reference = "7f34f08888d03f99a9092fa0bd8954265f732f6f"
+
+[[package]]
 name = "simple-websocket"
 version = "1.1.0"
 description = "Simple WebSocket server and client for Python"
@@ -659,4 +683,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13"
-content-hash = "062792781e349551efb65e9f9afd7d08deb143a0176a1c89187045475c7b0baf"
+content-hash = "059e0597d23d07e488d1272ef1566904ebb92a92ee957a307c22355aea29d5c4"
