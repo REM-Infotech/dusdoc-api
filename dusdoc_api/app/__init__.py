@@ -5,9 +5,6 @@ from quart_cors import cors
 from quart_jwt_extended import JWTManager
 from quart_socketio import SocketIO
 
-from dusdoc_api.app.namespaces import register_namespace
-from dusdoc_api.app.routes import register_routes
-
 app = Quart(__name__)
 jwt = JWTManager(app)
 io = SocketIO()
@@ -18,7 +15,10 @@ def cors_allowed_origins(orig: str | None = None):
 
 
 async def create_app():
-    async with app.app_context:
+    from dusdoc_api.app.namespaces import register_namespace
+    from dusdoc_api.app.routes import register_routes
+
+    async with app.app_context():
         await io.init_app(app, cors_allowed_origins=cors_allowed_origins)
         await register_routes(app)
         await register_namespace(io)
