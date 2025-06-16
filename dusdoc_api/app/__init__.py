@@ -1,21 +1,36 @@
+import re
+
 from quart import Quart
-import asyncio
-from dusdoc_api.app.routes import register_routes
+from quart_cors import cors
 from quart_jwt_extended import JWTManager
-from uuid import uuid4
+from quart_socketio import SocketIO
+
+from dusdoc_api.app.namespaces import register_namespace
+from dusdoc_api.app.routes import register_routes
 
 app = Quart(__name__)
-
-app.config["JWT_SECRET_KEY"] = uuid4().hex  # Use a random secret key for JWT
-
 jwt = JWTManager(app)
+io = SocketIO()
 
 
-@app.after_request
-async def add_cors_headers(response):
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-    return response
+def cors_allowed_origins(orig: str | None = None):
+    return True
 
 
-asyncio.run(register_routes(app))
+async def create_app():
+    async with app.app_context:
+        await io.init_app(app, cors_allowed_origins=cors_allowed_origins)
+        await register_routes(app)
+        await register_namespace(io)
+
+    re.compile(r"^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+    return cors(
+        app,
+        allow_credentials=True,
+        allow_origin=[
+            re.compile(r"^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"),
+            re.compile(r"^https:\/\/(?:\d{1,3}\.){3}\d{1,3}$"),
+            re.compile(r"^http:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"),
+            re.compile(r"^http:\/\/(?:\d{1,3}\.){3}\d{1,3}$"),
+        ],
+    )

@@ -1,12 +1,11 @@
 """Entrypoint for the server application."""
 
 import asyncio
-from quart_cors import cors
+
 import uvicorn
 from socketio import ASGIApp
 
-from dusdoc_api.app import app
-from dusdoc_api.socket_dusdoc import sio
+from dusdoc_api.app import create_app
 
 
 async def main(app: ASGIApp) -> None:
@@ -17,6 +16,4 @@ async def main(app: ASGIApp) -> None:
 
 
 if __name__ == "__main__":
-    app = ASGIApp(sio, cors(app, allow_origin="*"))
-
-    asyncio.run(main(app=app))
+    asyncio.run(main(app=create_app()))
