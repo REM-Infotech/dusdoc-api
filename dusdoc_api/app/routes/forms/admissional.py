@@ -4,9 +4,15 @@ from quart.views import MethodView
 from dusdoc_api.models.users.admin import Users
 
 
-class AdmissionalForm(MethodView):  # noqa: D101
+class AdmissionalFormView(MethodView):  # noqa: D101
+    init_every_request = False
+    methods = ["GET", "POST"]
+
     def __init__(self, model: Users) -> None:  # noqa: D107
         self.model = model
 
-    async def post(self):  # noqa: ANN201
+    async def get(self):  # noqa: ANN003, ANN201
         return await make_response(jsonify(ok="ok"))
+
+    async def post(self):  # noqa: ANN003, ANN201
+        return jsonify(ok="ok"), 200

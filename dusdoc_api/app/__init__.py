@@ -49,4 +49,5 @@ async def create_app() -> Quart:  # noqa: D103
             re.compile(r"^http:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"),
             re.compile(r"^http:\/\/(?:\d{1,3}\.){3}\d{1,3}$"),
         ],
+        allow_methods=["GET", "POST"],
     )
