@@ -15,4 +15,4 @@ class AdmissionalFormView(MethodView):  # noqa: D101
         return await make_response(jsonify(ok="ok"))
 
     async def post(self):  # noqa: ANN003, ANN201
-        return jsonify(ok="ok"), 200
+        return await make_response(jsonify(ok="ok"))
