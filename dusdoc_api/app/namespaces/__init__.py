@@ -1,9 +1,16 @@
 from quart_socketio import SocketIO  # noqa: D104
 
+from dusdoc_api.app.namespaces.docs import FuncionarioDocsNamespace
 from dusdoc_api.app.namespaces.forms import FuncionarioFormsNamespace
 from dusdoc_api.app.namespaces.system import DusdocNamespace
 
 
 async def register_namespace(io: SocketIO) -> None:  # noqa: D103
-    await io.register_namespace(DusdocNamespace("/", io))
-    await io.register_namespace(FuncionarioFormsNamespace("/funcionario_forms", io))
+    namespaces = [
+        DusdocNamespace("/", io),
+        FuncionarioFormsNamespace("/funcionario_forms", io),
+        FuncionarioDocsNamespace("/funcionario_informacoes", io),
+    ]
+
+    for namespace in namespaces:
+        await io.register_namespace(namespace)
