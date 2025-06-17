@@ -13,8 +13,6 @@ class FuncionarioFormsNamespace(Namespace):  # noqa: D101
                 v: FileStorage
                 print(v.stream.read())
 
-                parent = Path(__file__).parent.resolve()
-                await v.save(parent.joinpath("test.xlsx"))
             return True
 
         except Exception as e:

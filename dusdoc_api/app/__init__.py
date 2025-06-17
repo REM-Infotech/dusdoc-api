@@ -8,6 +8,8 @@ from quart_cors import cors
 from quart_jwt_extended import JWTManager
 from quart_socketio import SocketIO
 
+from dusdoc_api.app.routes.forms import register_api
+
 app = Quart(__name__)
 jwt = JWTManager(app)
 io = SocketIO()
@@ -32,6 +34,7 @@ async def create_app() -> Quart:  # noqa: D103
     async with app.app_context():
         db.init_app(app)
         await io.init_app(app, cors_allowed_origins=cors_allowed_origins)
+        await register_api(app)
         await register_routes(app)
         await register_namespace(io)
         await init_database(app)

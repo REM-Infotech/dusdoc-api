@@ -9,6 +9,10 @@ if TYPE_CHECKING:
 async def register_routes(app: Quart) -> None:
     """Register all routes with the Quart application."""
     from .auth import auth
+    from .forms import forms
 
-    app.register_blueprint(auth)
+    blueprints = [auth, forms]
+
+    for blueprint in blueprints:
+        app.register_blueprint(blueprint)
     # Add any additional routes or blueprints here as needed
