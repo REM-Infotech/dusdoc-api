@@ -25,11 +25,11 @@ class FuncionarioFormsNamespace(Namespace):
         try:
             data = request.socket_data
             for k, v in list(data.items()):
-                v: FileStorage
-                print(v.stream.read())
+                if isinstance(v, FileStorage):
+                    print(v.stream.read())
 
-                parent = Path(__file__).parent.resolve()
-                await v.save(parent.joinpath("test.xlsx"))
+                    parent = Path(__file__).parent.resolve()
+                    v.save(parent.joinpath(v.filename))
             return True
 
         except Exception as e:
