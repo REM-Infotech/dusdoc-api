@@ -18,7 +18,11 @@ dependencies = [
     "quart-cors (>=0.8.0,<0.9.0)",
     "quart-socketio @ git+https://github.com/Robotz213/Quart-SocketIO.git",
     "trio (>=0.30.0,<0.31.0)",
-    "flask-sqlalchemy (>=3.1.1,<4.0.0)"
+    "flask-sqlalchemy (>=3.1.1,<4.0.0)",
+    "quart-flask-patch (>=0.3.0,<0.4.0)",
+    "python-dotenv (>=1.1.0,<2.0.0)",
+    "pytz (>=2025.2,<2026.0)",
+    "bcrypt (>=4.3.0,<5.0.0)"
 ]
 
 [tool.poetry]

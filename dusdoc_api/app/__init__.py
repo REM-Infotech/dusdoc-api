@@ -1,12 +1,12 @@
 import re
+from pathlib import Path
 
+import quart_flask_patch  # noqa: F401
 from flask_sqlalchemy import SQLAlchemy
 from quart import Quart, jsonify
 from quart_cors import cors
 from quart_jwt_extended import JWTManager
 from quart_socketio import SocketIO
-
-from dusdoc_api.models import init_database
 
 app = Quart(__name__)
 jwt = JWTManager(app)
@@ -26,7 +26,9 @@ def cors_allowed_origins(orig: str | None = None):
 async def create_app():
     from dusdoc_api.app.namespaces import register_namespace
     from dusdoc_api.app.routes import register_routes
+    from dusdoc_api.models import init_database
 
+    app.config.from_pyfile(Path(__file__).parent.resolve().joinpath("quartconf.py"))
     async with app.app_context():
         db.init_app(app)
         await io.init_app(app, cors_allowed_origins=cors_allowed_origins)

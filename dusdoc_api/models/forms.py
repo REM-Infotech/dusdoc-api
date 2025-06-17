@@ -20,6 +20,7 @@ class FileModel(db.Model):
 
 
 class CacheForms(db.Model):
+    __tablename__ = "cached_form"
     id = Column(BigInteger, primary_key=True)
     user_id = Column(BigInteger, ForeignKey("users.id"))
     files = bots = db.relationship(

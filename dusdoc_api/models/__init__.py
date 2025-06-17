@@ -1,10 +1,9 @@
 from quart import Quart
 
 from dusdoc_api.app import db
+from dusdoc_api.models import forms, users
 
-from .forms import CacheForms
-
-__all__ = ["CacheForms"]
+__all__ = ["forms", "users"]
 
 
 async def init_database(app: Quart):
