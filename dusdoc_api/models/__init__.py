@@ -1,11 +1,34 @@
+from os import environ
+
+from dotenv import load_dotenv
 from quart import Quart
 
 from dusdoc_api.app import db
-from dusdoc_api.models import forms, users
+from dusdoc_api.models import forms
+from dusdoc_api.models.users import Users
 
 __all__ = ["forms", "users"]
 
+load_dotenv()
+
 
 async def init_database(app: Quart):
+    env = environ
     async with app.app_context():
         db.create_all()
+        user = (
+            db.session.query(Users)
+            .filter(Users.login == env.get("ROOT_USERNAME"))
+            .first()
+        )
+        if not user:
+            user = Users(
+                login=env.get("ROOT_USERNAME"),
+                email=env.get("ROOT_EMAIL"),
+                nome_usuario=env.get("ROOT_USERNAME"),
+            )
+
+            user.senhacrip = env.get("ROOT_PASSWORD")
+
+            db.session.add(user)
+            db.session.commit()

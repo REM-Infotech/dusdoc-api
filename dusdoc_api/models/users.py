@@ -9,7 +9,6 @@ import bcrypt
 import pytz
 from quart_jwt_extended import get_current_user
 from sqlalchemy import BigInteger, Column, DateTime, ForeignKey, LargeBinary, String
-from sqlalchemy.orm import relationship
 
 from dusdoc_api.app import db, jwt  # noqa: F401
 
@@ -86,7 +85,7 @@ class SuperUser(db.Model):
     __tablename__ = "superuser"
     id: int = Column(BigInteger, primary_key=True)
     users_id: int = Column(BigInteger, ForeignKey("users.id"))
-    users = relationship("Users", backref=db.backref("supersu", lazy=True))
+    users = db.relationship("Users", backref=db.backref("supersu", lazy=True))
 
 
 class Users(db.Model):
@@ -105,7 +104,7 @@ class Users(db.Model):
     blob_doc = Column(LargeBinary(length=(2**32) - 1))
 
     licenseus_id: int = Column(BigInteger, ForeignKey("licenses_users.id"))
-    licenseusr = relationship("LicensesUsers", backref="user")
+    licenseusr = db.relationship("LicensesUsers", backref="user")
 
     def __init__(
         self, login: str = None, nome_usuario: str = None, email: str = None
@@ -196,7 +195,7 @@ class LicensesUsers(db.Model):
     license_token: str = Column(String(length=512), nullable=False, unique=True)
 
     # Relacionamento de muitos para muitos com users
-    admins = relationship("Users", secondary="admins", backref="admin")
+    admins = db.relationship("Users", secondary="admins", backref="admin")
 
 
 admins = db.Table(
