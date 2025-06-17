@@ -8,7 +8,7 @@ from uuid import uuid4
 import bcrypt
 import pytz
 from quart_jwt_extended import get_current_user
-from sqlalchemy import BigInteger, Column, DateTime, ForeignKey, LargeBinary, String
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, LargeBinary, String
 
 from dusdoc_api.app import db, jwt  # noqa: F401
 
@@ -64,7 +64,7 @@ salt = bcrypt.gensalt()
 class TokenBlocklist(db.Model):
     """Database model for token blocklist."""
 
-    id: int = Column(BigInteger, primary_key=True)
+    id: int = Column(Integer, primary_key=True, default=int(uuid4().hex, 16))
     jti: str = Column(String(36), nullable=False, index=True)
     type: str = Column(String(16), nullable=False)
     user_id = Column(
@@ -83,8 +83,8 @@ class SuperUser(db.Model):
     """Database model for a super user."""
 
     __tablename__ = "superuser"
-    id: int = Column(BigInteger, primary_key=True)
-    users_id: int = Column(BigInteger, ForeignKey("users.id"))
+    id: int = Column(Integer, primary_key=True)
+    users_id: int = Column(Integer, ForeignKey("users.id"))
     users = db.relationship("Users", backref=db.backref("supersu", lazy=True))
 
 
@@ -92,7 +92,7 @@ class Users(db.Model):
     """Database model for application users."""
 
     __tablename__ = "users"
-    id: int = Column(BigInteger, primary_key=True)
+    id: int = Column(Integer, primary_key=True)
     login: str = Column(String(length=30), nullable=False, unique=True)
     nome_usuario: str = Column(String(length=64), nullable=False, unique=True)
     email: str = Column(String(length=50), nullable=False, unique=True)
@@ -103,7 +103,7 @@ class Users(db.Model):
     filename: str = Column(String(length=128))
     blob_doc = Column(LargeBinary(length=(2**32) - 1))
 
-    licenseus_id: int = Column(BigInteger, ForeignKey("licenses_users.id"))
+    licenseus_id: int = Column(Integer, ForeignKey("licenses_users.id"))
     licenseusr = db.relationship("LicensesUsers", backref="user")
 
     def __init__(
@@ -189,7 +189,7 @@ class LicensesUsers(db.Model):
     """Database model representing license users."""
 
     __tablename__ = "licenses_users"
-    id: int = Column(BigInteger, primary_key=True)
+    id: int = Column(Integer, primary_key=True, default=int(uuid4().hex, 16))
     name_client: str = Column(String(length=60), nullable=False, unique=True)
     cpf_cnpj: str = Column(String(length=30), nullable=False, unique=True)
     license_token: str = Column(String(length=512), nullable=False, unique=True)
@@ -200,10 +200,10 @@ class LicensesUsers(db.Model):
 
 admins = db.Table(
     "admins",
-    Column("users_id", BigInteger, ForeignKey("users.id"), primary_key=True),
+    Column("users_id", Integer, ForeignKey("users.id"), primary_key=True),
     Column(
         "license_user_id",
-        BigInteger,
+        Integer,
         ForeignKey("licenses_users.id"),
         primary_key=True,
     ),
