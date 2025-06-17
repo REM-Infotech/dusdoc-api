@@ -1,4 +1,4 @@
-from os import environ
+from os import environ  # noqa: D104
 
 from dotenv import load_dotenv
 from quart import Quart
@@ -7,20 +7,16 @@ from dusdoc_api.app import db
 from dusdoc_api.models import forms
 from dusdoc_api.models.users import Users
 
-__all__ = ["forms", "users"]
+__all__ = ["forms", "Users"]
 
 load_dotenv()
 
 
-async def init_database(app: Quart):
+async def init_database(app: Quart) -> None:
     env = environ
     async with app.app_context():
         db.create_all()
-        user = (
-            db.session.query(Users)
-            .filter(Users.login == env.get("ROOT_USERNAME"))
-            .first()
-        )
+        user = db.session.query(Users).filter(Users.login == env.get("ROOT_USERNAME")).first()
         if not user:
             user = Users(
                 login=env.get("ROOT_USERNAME"),

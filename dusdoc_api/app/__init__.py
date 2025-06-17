@@ -1,9 +1,9 @@
-import re
+import re  # noqa: D104
 from pathlib import Path
 
 import quart_flask_patch  # noqa: F401
 from flask_sqlalchemy import SQLAlchemy
-from quart import Quart, jsonify
+from quart import Quart, Response, jsonify
 from quart_cors import cors
 from quart_jwt_extended import JWTManager
 from quart_socketio import SocketIO
@@ -15,15 +15,15 @@ db = SQLAlchemy()
 
 
 @app.route("/", methods=["GET", "POST"])
-async def test():
+async def test() -> Response:  # noqa: D103
     return jsonify(ok="ok")
 
 
-def cors_allowed_origins(orig: str | None = None):
+def cors_allowed_origins(orig: str | None = None) -> bool:  # noqa: D103
     return True
 
 
-async def create_app():
+async def create_app() -> Quart:  # noqa: D103
     from dusdoc_api.app.namespaces import register_namespace
     from dusdoc_api.app.routes import register_routes
     from dusdoc_api.models import init_database

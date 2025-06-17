@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime  # noqa: D104
 
 import pytz
 from quart_jwt_extended import get_current_user

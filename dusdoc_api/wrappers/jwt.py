@@ -1,16 +1,17 @@
-from functools import wraps
+from functools import wraps  # noqa: D100
+from typing import Any, Callable
+
 from quart_jwt_extended import decode_token
-from dusdoc_api.app import app
 from socketio import AsyncServer
 
+from dusdoc_api.app import app
 
-def jwt_socketio_required(func):
-    """
-    Decorator to require JWT authentication for Socket.IO events.
-    """
+
+def jwt_socketio_required(func: Callable[..., Any]):  # noqa: ANN201
+    """Require JWT authentication for Socket.IO events."""
 
     @wraps(func)
-    async def wrapper(
+    async def wrapper(  # noqa: ANN202
         self: AsyncServer = None,
         sid: str = None,
         data: str | int = None,
@@ -32,7 +33,7 @@ def jwt_socketio_required(func):
 
         token = environ.get("token")
         if not token:
-            return dict(error="Unauthorized", status=401)
+            return {"error": "Unauthorized", "status": 401}
 
         async with app.app_context():
             decoded_token = decode_token(token)  # noqa: F841

@@ -1,17 +1,15 @@
-from sqlalchemy import ForeignKey, Integer, LargeBinary, String
+from sqlalchemy import ForeignKey, Integer, LargeBinary, String  # noqa: D100
 
 from dusdoc_api.app import db
 
 files = db.Table(
     "files",
     db.Column("file_id", Integer, db.ForeignKey("file.id"), primary_key=True),
-    db.Column(
-        "cached_form_id", Integer, db.ForeignKey("cached_form.id"), primary_key=True
-    ),
+    db.Column("cached_form_id", Integer, db.ForeignKey("cached_form.id"), primary_key=True),
 )
 
 
-class FileModel(db.Model):
+class FileModel(db.Model):  # noqa: D101
     __tablename__ = "file"
     id = db.Column(Integer, primary_key=True)
     filename = db.Column(String)
@@ -19,7 +17,7 @@ class FileModel(db.Model):
     temporary_path = db.Column(String)
 
 
-class CacheForms(db.Model):
+class CacheForms(db.Model):  # noqa: D101
     __tablename__ = "cached_form"
     id = db.Column(Integer, primary_key=True)
     user_id = db.Column(Integer, ForeignKey("users.id"))
