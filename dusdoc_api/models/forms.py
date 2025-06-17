@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, LargeBinary, String
+from sqlalchemy import ForeignKey, Integer, LargeBinary, String
 
 from dusdoc_api.app import db
 
@@ -13,17 +13,17 @@ files = db.Table(
 
 class FileModel(db.Model):
     __tablename__ = "file"
-    id = Column(Integer, primary_key=True)
-    filename = Column(String)
-    blob = Column(LargeBinary)
-    temporary_path = Column(String)
+    id = db.Column(Integer, primary_key=True)
+    filename = db.Column(String)
+    blob = db.Column(LargeBinary)
+    temporary_path = db.Column(String)
 
 
 class CacheForms(db.Model):
     __tablename__ = "cached_form"
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
-    files = bots = db.relationship(
+    id = db.Column(Integer, primary_key=True)
+    user_id = db.Column(Integer, ForeignKey("users.id"))
+    files = db.relationship(
         "FileModel",
         secondary="files",
         backref=db.backref("cached_form", lazy=True),
