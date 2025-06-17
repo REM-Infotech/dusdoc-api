@@ -740,7 +740,7 @@ docs = ["sphinx"]
 type = "git"
 url = "https://github.com/Robotz213/Quart-SocketIO.git"
 reference = "HEAD"
-resolved_reference = "788ef47d044ebd1b6128fe614b47ff9cfc44276e"
+resolved_reference = "3a830929a56010107bfec5f7f394554d874cffa1"
 
 [[package]]
 name = "simple-websocket"
