@@ -7,6 +7,7 @@ from quart import Quart, Response, jsonify
 from quart_cors import cors
 from quart_jwt_extended import JWTManager
 from quart_socketio import SocketIO
+from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
 from dusdoc_api.app.routes.forms import register_api
 
@@ -40,11 +41,13 @@ async def create_app() -> Quart:  # noqa: D103
         await init_database(app)
 
     re.compile(r"^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+    app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
     return cors(
         app,
         allow_credentials=True,
         allow_origin=[
             re.compile(r"^http:\/\/[a-zA-Z0-9]+\:\d+$"),
+            re.compile(r"^http:\/\/(?:\d{1,3}\.){3}\d{1,3}:\d+$"),
             re.compile(r"^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"),
             re.compile(r"^https:\/\/(?:\d{1,3}\.){3}\d{1,3}$"),
             re.compile(r"^http:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"),
