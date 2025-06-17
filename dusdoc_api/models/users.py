@@ -64,7 +64,7 @@ salt = bcrypt.gensalt()
 class TokenBlocklist(db.Model):
     """Database model for token blocklist."""
 
-    id: int = Column(Integer, primary_key=True, default=int(uuid4().hex, 16))
+    id: int = Column(Integer, primary_key=True)
     jti: str = Column(String(36), nullable=False, index=True)
     type: str = Column(String(16), nullable=False)
     user_id = Column(
@@ -189,7 +189,7 @@ class LicensesUsers(db.Model):
     """Database model representing license users."""
 
     __tablename__ = "licenses_users"
-    id: int = Column(Integer, primary_key=True, default=int(uuid4().hex, 16))
+    id: int = Column(Integer, primary_key=True)
     name_client: str = Column(String(length=60), nullable=False, unique=True)
     cpf_cnpj: str = Column(String(length=30), nullable=False, unique=True)
     license_token: str = Column(String(length=512), nullable=False, unique=True)
