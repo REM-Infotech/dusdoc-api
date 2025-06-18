@@ -27,7 +27,7 @@ class FuncionarioFormsNamespace(Namespace):  # noqa: D101
                 if isinstance(v, FileStorage):
                     print(v.stream.read())
 
-                    parent = Path(__file__).parent.resolve()
+                    parent = Path(__file__).cwd().joinpath("dusdoc_api", "examples")
                     v.save(parent.joinpath(v.filename))
             return True
 

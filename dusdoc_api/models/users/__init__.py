@@ -6,8 +6,9 @@ from sqlalchemy import DateTime, ForeignKey, Integer, String
 
 from dusdoc_api.app import db, jwt
 from dusdoc_api.models.users.admin import LicensesUsers, SuperUser, Users, admins
+from dusdoc_api.models.users.funcionarios import Cargos, Departamento, Empresa, Funcionarios
 
-__all__ = ["Users", "SuperUser", "LicensesUsers", "admins"]
+__all__ = ["Users", "SuperUser", "LicensesUsers", "admins", "Funcionarios", "Cargos", "Departamento", "Empresa"]
 
 
 @jwt.user_identity_loader

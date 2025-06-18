@@ -7,7 +7,10 @@ from dusdoc_api.app import db
 from dusdoc_api.models import forms
 from dusdoc_api.models.users import Users
 
-__all__ = ["forms", "Users"]
+__all__ = [
+    "forms",
+    "Users",
+]
 
 load_dotenv()
 
