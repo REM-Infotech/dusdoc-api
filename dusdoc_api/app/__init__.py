@@ -44,14 +44,6 @@ async def create_app() -> Quart:  # noqa: D103
     app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
     return cors(
         app,
-        allow_credentials=True,
-        allow_origin=[
-            re.compile(r"^http:\/\/[a-zA-Z0-9]+\:\d+$"),
-            re.compile(r"^http:\/\/(?:\d{1,3}\.){3}\d{1,3}:\d+$"),
-            re.compile(r"^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"),
-            re.compile(r"^https:\/\/(?:\d{1,3}\.){3}\d{1,3}$"),
-            re.compile(r"^http:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"),
-            re.compile(r"^http:\/\/(?:\d{1,3}\.){3}\d{1,3}$"),
-        ],
+        allow_origin="*",
         allow_methods=["GET", "POST"],
     )
