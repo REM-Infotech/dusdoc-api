@@ -49,4 +49,5 @@ async def register_namespace_funcionario(io: SocketIO) -> None:  # noqa: D103
 
 async def registry_funcionarios(app: Quart, io: SocketIO) -> None:  # noqa: D103
     await register_api_funcionario(app)
+    await register_routes_funcionarios(app)
     await register_namespace_funcionario(io)

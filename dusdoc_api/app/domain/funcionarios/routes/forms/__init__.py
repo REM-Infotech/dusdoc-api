@@ -3,4 +3,4 @@
 
 from quart import Blueprint
 
-forms = Blueprint("forms", __name__, url_prefix="/forms")
+forms = Blueprint(__name__.replace(".", "_"), __name__, url_prefix="/forms")

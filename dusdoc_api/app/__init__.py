@@ -9,7 +9,7 @@ from quart_jwt_extended import JWTManager
 from quart_socketio import SocketIO
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
 
-from dusdoc_api.app.routes.forms import register_api
+from dusdoc_api.app.domain import register_quart
 
 app = Quart(__name__)
 jwt = JWTManager(app)
@@ -27,17 +27,13 @@ def cors_allowed_origins(orig: str | None = None) -> bool:  # noqa: D103
 
 
 async def create_app() -> Quart:  # noqa: D103
-    from dusdoc_api.app.namespaces import register_namespace
-    from dusdoc_api.app.routes import register_routes
     from dusdoc_api.models import init_database
 
     app.config.from_pyfile(Path(__file__).parent.resolve().joinpath("quartconf.py"))
     async with app.app_context():
         db.init_app(app)
         await io.init_app(app, cors_allowed_origins=cors_allowed_origins)
-        await register_api(app)
-        await register_routes(app)
-        await register_namespace(io)
+        await register_quart(app, io)
         await init_database(app)
 
     re.compile(r"^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")

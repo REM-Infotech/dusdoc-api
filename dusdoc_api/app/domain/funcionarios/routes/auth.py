@@ -7,7 +7,7 @@ from quart_jwt_extended import create_access_token
 from dusdoc_api.app import app
 from dusdoc_api.models.users.admin import Users
 
-auth = Blueprint("auth", __name__, url_prefix="/auth_funcionario")
+auth = Blueprint(__name__.replace(".", "_"), __name__, url_prefix="/auth_funcionario")
 
 
 @auth.route("/login", methods=["GET", "POST"])

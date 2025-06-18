@@ -4,9 +4,9 @@
 from quart import Quart, Response
 from quart_socketio import SocketIO
 
-from dusdoc_api.app.domain.admin.namespaces.docs import adminDocsNamespace
-from dusdoc_api.app.domain.admin.namespaces.forms import adminFormsNamespace
-from dusdoc_api.app.domain.admin.namespaces.system import DusdocNamespace
+# from dusdoc_api.app.domain.admin.namespaces.docs import adminDocsNamespace
+# from dusdoc_api.app.domain.admin.namespaces.forms import adminFormsNamespace
+# from dusdoc_api.app.domain.admin.namespaces.system import DusdocNamespace
 
 
 async def register_routes_admin(app: Quart) -> None:
@@ -37,16 +37,18 @@ async def register_api_admin(app: Quart) -> None:  # noqa: D103
 
 
 async def register_namespace_admin(io: SocketIO) -> None:  # noqa: D103
-    namespaces = [
-        DusdocNamespace("/", io),
-        adminFormsNamespace("/admin_forms", io),
-        adminDocsNamespace("/admin_informacoes", io),
-    ]
+    """"""  # noqa: D419
+    # namespaces = [
+    #     DusdocNamespace("/", io),
+    #     adminFormsNamespace("/admin_forms", io),
+    #     adminDocsNamespace("/admin_informacoes", io),
+    # ]
 
-    for namespace in namespaces:
-        await io.register_namespace(namespace)
+    # for namespace in namespaces:
+    #     await io.register_namespace(namespace)
 
 
 async def registry_admin(app: Quart, io: SocketIO) -> None:  # noqa: D103
     await register_api_admin(app)
+    await register_routes_admin(app)
     # await register_namespace_admin(io)
