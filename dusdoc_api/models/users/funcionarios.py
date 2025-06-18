@@ -11,21 +11,24 @@ from dusdoc_api.app import db
 class Funcionarios(db.Model):  # noqa: D101
     __tablename__ = "funcionarios"
     id = db.Column(db.Integer, primary_key=True)
-    codigo: str = db.Column(String(length=6), nullable=False, unique=True)
-    nome_funcionario: str = db.Column(String(length=64), nullable=False)
-    cpf_funcionario: str = db.Column(String(length=14), unique=True)
-    email_funcionario: str = db.Column(String(length=64))
-    deficiencia: str = db.Column(String(length=64))
-    data_admissao: datetime = db.Column(DateTime, default=datetime.now(pytz.timezone("Etc/GMT+4")))
-    cargo: str = db.Column(String(length=64))
-    departamento: str = db.Column(String(length=64))
-    empresa: str = db.Column(String(length=64))
+    # Dados de login
+    nome: str = db.Column(String(length=64), nullable=False)
+    email: str = db.Column(String(length=64))
     password: str = db.Column(String(length=60), nullable=False)
+    data_admissao: datetime = db.Column(DateTime, default=datetime.now(pytz.timezone("Etc/GMT+4")))
     login_time = db.Column(DateTime, default=datetime.now(pytz.timezone("America/Manaus")))
     verification_code: str = db.Column(String(length=45), unique=True)
     login_id: str = db.Column(String(length=64), nullable=False, default=uuid4().hex)
     filename: str = db.Column(String(length=128))
     blob_doc = db.Column(LargeBinary(length=(2**32) - 1))
+
+    # Dados de cadastro
+    codigo: str = db.Column(String(length=6), nullable=False, unique=True)
+    deficiencia: str = db.Column(String(length=64))
+    cargo: str = db.Column(String(length=64))
+    departamento: str = db.Column(String(length=64))
+    empresa: str = db.Column(String(length=64))
+    cpf: str = db.Column(String(length=14), unique=True)
 
 
 class Cargos(db.Model):  # noqa: D101
