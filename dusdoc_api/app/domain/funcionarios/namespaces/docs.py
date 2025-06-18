@@ -13,12 +13,13 @@ class FuncionarioDocsNamespace(Namespace):  # noqa: D101
     async def on_meus_docs(self) -> list[dict[str, str]]:  # noqa: D102
         path_parent = Path(__file__).parent.resolve().joinpath("example.json")
         async with aiofiles.open(str(path_parent), "r", encoding="utf-8") as f:
-            print(f)
             readfile = await f.read()
             data = json.loads(readfile)
             return data
 
     async def on_solicitados(self) -> list[dict[str, str]]:
-        return [
-            {"solicitacao_desc": "Formulário admissional", "request_date": "01/02/2025"},
-        ]
+        path_parent = Path(__file__).parent.resolve().joinpath("example_solicitados.json")
+        async with aiofiles.open(str(path_parent), "r", encoding="utf-8") as f:
+            readfile = await f.read()
+            data = json.loads(readfile)
+            return data
