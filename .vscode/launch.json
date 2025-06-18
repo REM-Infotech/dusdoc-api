@@ -9,7 +9,6 @@
             "type": "debugpy",
             "request": "launch",
             "module": "dusdoc_api",
-            "justMyCode": false
         }
     ]
 }

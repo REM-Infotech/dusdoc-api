@@ -1,38 +1,31 @@
+import json  # noqa: D100, F401
 from pathlib import Path  # noqa: D100, F401
 
-from quart import request
-from quart.datastructures import FileStorage
+import aiofiles
+from quart import request  # noqa: F401
+from quart.datastructures import FileStorage  # noqa: F401
 from quart_socketio import Namespace
 
 
 class FuncionariosNamespace(Namespace):  # noqa: D101
+    async def on_connect(self) -> None:  # noqa: D102
+        """Handle the connection event."""
+        print("FuncionariosNamespace connected")
+
     async def on_listagem_funcionarios(self) -> bool:  # noqa: D102
+        data = []
         try:
-            data = request.socket_data
-            for _k, v in list(data.items()):
-                if not isinstance(v, FileStorage):
-                    if v is not None and v != "":
-                        print(v)
-
-            return True
+            parent = Path(__file__).cwd().joinpath("dusdoc_api", "examples")
+            async with aiofiles.open(parent.joinpath("funcionarios.json"), "r", encoding="utf-8") as f:
+                read_buff = await f.read()
+                data: list[list[str]] = json.loads(read_buff)
 
         except Exception as e:
             print(e)
-            return False
+            return []
 
-    async def on_filter_listagem_funcionarios(self) -> bool | None:  # noqa: D102
-        try:
-            data = request.socket_data
-            for _k, v in list(data.items()):
-                if not isinstance(v, FileStorage):
-                    if v is not None and v != "":
-                        print(v)
-
-            return True
-
-        except Exception as e:
-            print(e)
-            return False
+        print(data)
+        return data
 
     # async def on_admissional_files(self) -> bool:
     #     try:

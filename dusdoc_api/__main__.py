@@ -1,6 +1,7 @@
 """Entrypoint for the server application."""
 
 import asyncio
+from contextlib import suppress
 
 import uvicorn
 
@@ -16,4 +17,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    with suppress(KeyboardInterrupt):
+        asyncio.run(main())
