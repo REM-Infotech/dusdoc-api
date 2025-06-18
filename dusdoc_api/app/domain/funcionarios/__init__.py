@@ -1,7 +1,7 @@
 # noqa: D104
 
 
-from quart import Quart, Response
+from quart import Quart
 from quart_socketio import SocketIO
 
 from dusdoc_api.app.domain.funcionarios.namespaces.docs import FuncionarioDocsNamespace
@@ -19,11 +19,6 @@ async def register_routes_funcionarios(app: Quart) -> None:
     for blueprint in blueprints:
         app.register_blueprint(blueprint)
     # Add any additional routes or blueprints here as needed
-
-    @app.after_request
-    async def allow_origin(response: Response) -> Response:  # noqa: ANN202
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        return response
 
 
 async def register_api_funcionario(app: Quart) -> None:  # noqa: D103

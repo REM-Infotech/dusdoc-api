@@ -8,10 +8,11 @@ from quart_socketio import Namespace
 class FuncionarioFormsNamespace(Namespace):  # noqa: D101
     async def on_admissional_form(self) -> bool | None:  # noqa: D102
         try:
-            data = await request.socket_data
+            data = request.socket_data
             for _k, v in list(data.items()):
-                v: FileStorage
-                print(v.stream.read())
+                if not isinstance(v, FileStorage):
+                    if v is not None and v != "":
+                        print(v)
 
             return True
 

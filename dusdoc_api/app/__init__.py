@@ -3,7 +3,7 @@ from pathlib import Path
 
 import quart_flask_patch  # noqa: F401
 from flask_sqlalchemy import SQLAlchemy
-from quart import Quart, Response, jsonify
+from quart import Quart, Response  # noqa: F401
 from quart_cors import cors
 from quart_jwt_extended import JWTManager
 from quart_socketio import SocketIO
@@ -17,9 +17,14 @@ io = SocketIO()
 db = SQLAlchemy()
 
 
-@app.route("/", methods=["GET", "POST"])
-async def test() -> Response:  # noqa: D103
-    return jsonify(ok="ok")
+# @app.after_request
+# async def allow_origin(response: Response) -> Response:  # noqa: ANN202, D103
+#     response.headers["Access-Control-Allow-Origin"] = "*"
+#     response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+#     response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+#     response.headers["Access-Control-Allow-Credentials"] = "true"
+
+#     return response
 
 
 def cors_allowed_origins(orig: str | None = None) -> bool:  # noqa: D103
@@ -36,10 +41,7 @@ async def create_app() -> Quart:  # noqa: D103
         await register_quart(app, io)
         await init_database(app)
 
-    re.compile(r"^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
     app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
     return cors(
-        app,
-        allow_origin="*",
-        allow_methods=["GET", "POST"],
+        app, allow_origin=[re.compile(r"^https?:\/\/.*$")], allow_credentials=True, allow_methods="*", allow_headers="*"
     )
