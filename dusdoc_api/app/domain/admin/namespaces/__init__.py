@@ -1,8 +1,8 @@
 from quart_socketio import SocketIO  # noqa: D104
 
-from dusdoc_api.app.namespaces.docs import FuncionarioDocsNamespace
-from dusdoc_api.app.namespaces.forms import FuncionarioFormsNamespace
-from dusdoc_api.app.namespaces.system import DusdocNamespace
+from dusdoc_api.app.domain.funcionarios.namespaces.docs import FuncionarioDocsNamespace
+from dusdoc_api.app.domain.funcionarios.namespaces.forms import FuncionarioFormsNamespace
+from dusdoc_api.app.domain.funcionarios.namespaces.system import DusdocNamespace
 
 
 async def register_namespace(io: SocketIO) -> None:  # noqa: D103

@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from quart import Quart
 
 
-async def register_routes(app: Quart) -> None:
+async def register_routes_funcionarios(app: Quart) -> None:
     """Register all routes with the Quart application."""
     from .auth import auth
     from .forms import forms
@@ -20,6 +20,6 @@ async def register_routes(app: Quart) -> None:
     # Add any additional routes or blueprints here as needed
 
     @app.after_request
-    async def allow_origin(response: Response):  # noqa: ANN202
+    async def allow_origin(response: Response) -> Response:  # noqa: ANN202
         response.headers["Access-Control-Allow-Origin"] = "*"
         return response

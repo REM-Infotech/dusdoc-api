@@ -6,7 +6,7 @@ from quart import Blueprint, Quart
 forms = Blueprint("forms", __name__, url_prefix="/forms")
 
 
-async def register_api(app: Quart) -> None:  # noqa: D103
+async def register_api_funcionario(app: Quart) -> None:  # noqa: D103
     from dusdoc_api.models.users.admin import Users
 
     from .admissional import AdmissionalFormView
