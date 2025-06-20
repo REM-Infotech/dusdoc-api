@@ -2,9 +2,7 @@
 name = "dusdoc-api"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "Robotz213",email = "nicholas@robotz.dev"}
-]
+authors = [{ name = "Robotz213", email = "nicholas@robotz.dev" }]
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
@@ -22,11 +20,11 @@ dependencies = [
     "quart-flask-patch (>=0.3.0,<0.4.0)",
     "python-dotenv (>=1.1.0,<2.0.0)",
     "pytz (>=2025.2,<2026.0)",
-    "bcrypt (>=4.3.0,<5.0.0)"
+    "bcrypt (>=4.3.0,<5.0.0)",
 ]
 
 [tool.poetry]
-packages = [{include = "dusdoc_api", from = "src"}]
+packages = [{ include = "dusdoc_api", from = "." }]
 
 
 [tool.poetry.group.dev.dependencies]
