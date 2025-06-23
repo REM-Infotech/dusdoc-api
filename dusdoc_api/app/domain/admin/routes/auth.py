@@ -42,5 +42,6 @@ async def login() -> Response:
 
 @auth.get("/logout")
 async def logout() -> Response:  # noqa: D103
-    unset_jwt_cookies()
-    return await make_response(jsonify(message="Logout efetuado com sucesso!"))
+    response = await make_response(jsonify(message="Logout efetuado com sucesso!"))
+    unset_jwt_cookies(response)
+    return response
