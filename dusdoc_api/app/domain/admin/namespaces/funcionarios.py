@@ -5,12 +5,13 @@ import aiofiles
 from quart import request  # noqa: F401
 from quart.datastructures import FileStorage  # noqa: F401
 from quart_socketio import Namespace
+from tqdm import tqdm
 
 
 class FuncionariosNamespace(Namespace):  # noqa: D101
     async def on_connect(self) -> None:  # noqa: D102
         """Handle the connection event."""
-        print("FuncionariosNamespace connected")
+        tqdm.write("FuncionariosNamespace connected")
 
     async def on_listagem_funcionarios(self) -> bool:  # noqa: D102
         data = []
@@ -21,10 +22,10 @@ class FuncionariosNamespace(Namespace):  # noqa: D101
                 data: list[list[str]] = json.loads(read_buff)
 
         except Exception as e:
-            print(e)
+            tqdm.write(e)
             return []
 
-        print(data)
+        tqdm.write(json.loads(data))
         return data
 
     # async def on_admissional_files(self) -> bool:
