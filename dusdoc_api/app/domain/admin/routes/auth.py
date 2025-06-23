@@ -2,7 +2,7 @@ import json  # noqa: D100
 
 from flask_sqlalchemy import SQLAlchemy
 from quart import Blueprint, Response, jsonify, make_response, request  # noqa: D100
-from quart_jwt_extended import create_access_token
+from quart_jwt_extended import create_access_token, unset_jwt_cookies
 
 from dusdoc_api.app import app
 from dusdoc_api.models.users.admin import Users
@@ -38,3 +38,9 @@ async def login() -> Response:
         }),
         401,
     )
+
+
+@auth.get("/logout")
+async def logout() -> Response:  # noqa: D103
+    unset_jwt_cookies()
+    return await make_response(jsonify(message="Logout efetuado com sucesso!"))

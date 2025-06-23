@@ -25,7 +25,7 @@ class FuncionariosNamespace(Namespace):  # noqa: D101
             tqdm.write(e)
             return []
 
-        tqdm.write(json.loads(data))
+        # tqdm.write(json.dumps(data))
         return data
 
     # async def on_admissional_files(self) -> bool:
