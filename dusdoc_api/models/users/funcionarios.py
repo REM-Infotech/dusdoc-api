@@ -20,7 +20,7 @@ class Funcionarios(db.Model):  # noqa: D101
     login_id = Column(String(length=64))
     filename = Column(String(length=128))
     blob_doc = Column(LargeBinary(length=(2**32) - 1))
-
+    status_admissao = Column(String, default="PENDENTE")
     # Dados de cadastro
     codigo = Column(String(length=6), unique=True)
     deficiencia = Column(String(length=64))

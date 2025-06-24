@@ -26,8 +26,9 @@ class AdmissionalFormView(MethodView):  # noqa: D101
     def __init__(self, model: Users) -> None:  # noqa: D107
         self.model = model
 
+    @jwt_required
     async def post(self) -> Response:
-        return await make_response(jsonify(ok="ok"))
+        return await make_response(jsonify(message="Admissão realizada com sucesso!"))
 
 
 class CadastroFuncionarioView(MethodView):  # noqa: D101
