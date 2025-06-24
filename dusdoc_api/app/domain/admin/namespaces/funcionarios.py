@@ -1,11 +1,19 @@
 import json  # noqa: D100, F401
 from pathlib import Path  # noqa: D100, F401
+from typing import TypedDict
 
-import aiofiles
-from quart import request  # noqa: F401
+import aiofiles  # noqa: F401
+from flask_sqlalchemy import SQLAlchemy
+from quart import current_app, request  # noqa: F401
 from quart.datastructures import FileStorage  # noqa: F401
 from quart_socketio import Namespace
-from tqdm import tqdm
+from tqdm import tqdm  # noqa: F401
+
+
+class ListagemFuncionarioDict(TypedDict):  # noqa: D101
+    nome: str
+    codigo: str
+    email: str
 
 
 class FuncionariosNamespace(Namespace):  # noqa: D101
@@ -13,18 +21,27 @@ class FuncionariosNamespace(Namespace):  # noqa: D101
         """Handle the connection event."""
 
     async def on_listagem_funcionarios(self) -> bool:  # noqa: D102
-        data = []
-        try:
-            parent = Path(__file__).cwd().joinpath("dusdoc_api", "examples")
-            async with aiofiles.open(parent.joinpath("funcionarios.json"), "r", encoding="utf-8") as f:
-                read_buff = await f.read()
-                data: list[list[str]] = json.loads(read_buff)
+        from dusdoc_api.models.users.funcionarios import Funcionarios as Users
 
-        except Exception as e:
-            tqdm.write(e)
-            return []
+        db: SQLAlchemy = current_app.extensions["sqlalchemy"]
+        # data = []
+        # try:
+        #     parent = Path(__file__).cwd().joinpath("dusdoc_api", "examples")
+        #     async with aiofiles.open(parent.joinpath("funcionarios.json"), "r", encoding="utf-8") as f:
+        #         read_buff = await f.read()
+        #         data: list[list[str]] = json.loads(read_buff)
 
-        # tqdm.write(json.dumps(data))
+        # except Exception as e:
+        #     tqdm.write(e)
+        #     return []
+
+        # # tqdm.write(json.dumps(data))
+
+        users = db.session.query(Users).all()
+        data: list[ListagemFuncionarioDict] = [
+            ListagemFuncionarioDict(nome=user.nome, codigo=user.codigo, email=user.email) for user in users
+        ]
+
         return data
 
     # async def on_admissional_files(self) -> bool:
