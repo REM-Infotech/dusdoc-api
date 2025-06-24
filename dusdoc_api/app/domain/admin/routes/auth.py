@@ -2,7 +2,7 @@ import json  # noqa: D100
 
 from flask_sqlalchemy import SQLAlchemy
 from quart import Blueprint, Response, jsonify, make_response, request  # noqa: D100
-from quart_jwt_extended import create_access_token, unset_jwt_cookies
+from quart_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
 
 from dusdoc_api.app import app
 from dusdoc_api.models.users.admin import Users
@@ -24,13 +24,17 @@ async def login() -> Response:
     user = db.session.query(Users).filter(Users.email == data.get("email")).first()
 
     if user and user.check_password(data.get("password")):
-        return await make_response(
+        token = create_access_token(identity=user)
+        resp = await make_response(
             jsonify({
                 "message": "Login efetuado com sucesso!",
-                "token": create_access_token(identity=user),
             }),
             200,
         )
+
+        set_access_cookies(resp, token)
+
+        return resp
 
     return await make_response(
         jsonify({
