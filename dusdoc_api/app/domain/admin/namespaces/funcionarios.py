@@ -11,7 +11,6 @@ from tqdm import tqdm
 class FuncionariosNamespace(Namespace):  # noqa: D101
     async def on_connect(self) -> None:  # noqa: D102
         """Handle the connection event."""
-        tqdm.write("FuncionariosNamespace connected")
 
     async def on_listagem_funcionarios(self) -> bool:  # noqa: D102
         data = []
