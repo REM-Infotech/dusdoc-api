@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from quart import Response, current_app, jsonify, make_response, request
 from quart.views import MethodView
 from quart_jwt_extended import jwt_required
+from werkzeug.datastructures import CombinedMultiDict, FileStorage, MultiDict
 
 from dusdoc_api.models.users.funcionarios import Funcionarios as Users
 
@@ -19,6 +20,23 @@ class FuncionarioDict(TypedDict):  # noqa: D101
     empresa: str
 
 
+class AdmissaoDict(TypedDict):  # noqa: D101
+    prazo: str
+    contrato: FileStorage
+
+
+async def get_data() -> MultiDict:  # noqa: D103
+    data = await request.json or await request.form or await request.data
+    if isinstance(data, bytes):
+        data = data.decode()
+        if isinstance(data, str):
+            data = json.loads(data)
+
+    files = await request.files
+
+    return CombinedMultiDict([data, files])
+
+
 class AdmissionalFormView(MethodView):  # noqa: D101
     init_every_request = False
     methods = ["GET", "POST"]
@@ -28,6 +46,8 @@ class AdmissionalFormView(MethodView):  # noqa: D101
 
     @jwt_required
     async def post(self) -> Response:
+        data = AdmissaoDict(**(await get_data()))
+        print(data)
         return await make_response(jsonify(message="Admissão realizada com sucesso!"))
 
 
@@ -44,13 +64,8 @@ class CadastroFuncionarioView(MethodView):  # noqa: D101
     @jwt_required
     async def post(self) -> Response:
         db: SQLAlchemy = current_app.extensions["sqlalchemy"]
-        data = await request.json or await request.form or await request.data
-        if isinstance(data, bytes):
-            data = data.decode()
-            if isinstance(data, str):
-                data = json.loads(data)
 
-        data = FuncionarioDict(**data)
+        data = FuncionarioDict(**(await get_data()))
         funcionario = data.get("nome")
         cpf = data.get("cpf")
 

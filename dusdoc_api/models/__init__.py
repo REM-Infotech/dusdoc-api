@@ -4,11 +4,11 @@ from dotenv import load_dotenv
 from quart import Quart
 
 from dusdoc_api.app import db
-from dusdoc_api.models import admissional
+from dusdoc_api.models.admissional import RegistryAdmissao
 from dusdoc_api.models.users import Users
 
 __all__ = [
-    "admissional",
+    "RegistryAdmissao",
     "Users",
 ]
 

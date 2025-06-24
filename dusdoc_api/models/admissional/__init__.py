@@ -1,9 +1,9 @@
 # noqa: D104
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, LargeBinary, String, Table
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, LargeBinary, String
 
 from dusdoc_api.app import db
 
-files = Table(
+files = db.Table(
     "files",
     Column("file_id", Integer, ForeignKey("file.id"), primary_key=True),
     Column("cached_form_id", Integer, ForeignKey("cached_form.id"), primary_key=True),
@@ -11,14 +11,14 @@ files = Table(
 
 
 class RegistryAdmissao(db.Model):  # noqa: D101
-    id = Column(Integer)
+    id = Column(Integer, primary_key=True)
     prazo = Column(DateTime, nullable=False)
     funcionario_id = Column(Integer, ForeignKey("funcionarios.id"))
     funcionario = db.relationship("Funcionarios", backref="registry_admissao")
 
 
 class RegistryContrato(db.Model):  # noqa: D101
-    id = Column(Integer)
+    id = Column(Integer, primary_key=True)
     contrato_name: str = Column(String(length=128))
     blob_doc = Column(LargeBinary(length=(2**32) - 1))
     funcionario_id = Column(Integer, ForeignKey("funcionarios.id"))
