@@ -49,11 +49,26 @@ class AdmissionalFormView(MethodView):  # noqa: D101
 
     @jwt_required
     async def post(self) -> Response:
+        db: SQLAlchemy = current_app.extensions["sqlalchemy"]
         data = await get_data()
         data = dict(list(data.items()))
         data["prazo"] = datetime.strptime(data["prazo"], "%Y-%m-%d")
         data = AdmissaoDict(**data)
-        print(data)
+
+        funcionario = db.session.query(Users).filter(Users.id == data["funcionario_id"]).first()
+
+        admissao = RegistryAdmissao(prazo=data["prazo"])
+        admissao.funcionario = funcionario
+
+        contrato = RegistryContrato(
+            contrato_name=data["contrato"].name,
+            blob_doc=data["contrato"].stream.read(),
+        )
+        contrato.funcionario = funcionario
+
+        db.session.add_all([admissao, contrato])
+        db.session.commit()
+
         return await make_response(jsonify(message="Admissão realizada com sucesso!"))
 
 
