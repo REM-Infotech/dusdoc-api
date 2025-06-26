@@ -1,5 +1,6 @@
 # noqa: D100
 import json
+from datetime import datetime
 from typing import TypedDict  # noqa: D100
 
 from flask_sqlalchemy import SQLAlchemy
@@ -21,7 +22,7 @@ class FuncionarioDict(TypedDict):  # noqa: D101
 
 
 class AdmissaoDict(TypedDict):  # noqa: D101
-    prazo: str
+    prazo: datetime
     contrato: FileStorage
 
 
@@ -46,7 +47,9 @@ class AdmissionalFormView(MethodView):  # noqa: D101
 
     @jwt_required
     async def post(self) -> Response:
-        data = AdmissaoDict(**(await get_data()))
+        data = dict(list(await get_data()))
+        data["prazo"] = datetime.strptime(data["prazo"], "%Y-%m-%d")
+        data = AdmissaoDict(**data)
         print(data)
         return await make_response(jsonify(message="Admissão realizada com sucesso!"))
 
