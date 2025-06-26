@@ -44,6 +44,7 @@ class PainelFuncionario(MethodView):  # noqa: D101
 
         senha = uuid4().hex[:4].upper()
         user.senhacrip = senha
+
         db.session.commit()
         return await make_response(
             jsonify(

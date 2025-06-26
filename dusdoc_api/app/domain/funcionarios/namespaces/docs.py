@@ -15,6 +15,7 @@ from quart_socketio import Namespace
 
 
 class RegistroAdmissao(TypedDict):  # noqa: D101
+    id: str
     solicitacao_desc: str
     data_solicitacao: datetime
     prazo: datetime
@@ -45,12 +46,14 @@ class FuncionarioDocsNamespace(Namespace):  # noqa: D101
 
         dataReturn = [  # noqa: N806
             RegistroAdmissao(
+                id=item.id,
                 data_solicitacao=item.data_solicitacao.strftime("%d/%m/%Y"),
                 prazo=item.prazo.strftime("%d/%m/%Y"),
                 solicitacao_desc="Formulário Admissional",
                 extension_file="pdf",
             )
             for item in user
+            if not item.form_registry.submited
         ]
 
         return dataReturn
