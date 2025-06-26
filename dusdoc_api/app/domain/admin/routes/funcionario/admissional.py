@@ -1,6 +1,7 @@
 # noqa: D100
 from datetime import datetime
 
+import pytz
 from flask_sqlalchemy import SQLAlchemy
 from quart import Response, current_app, jsonify, make_response
 from quart.views import MethodView
@@ -29,7 +30,10 @@ class AdmissionalFormView(MethodView):  # noqa: D101
 
         funcionario = db.session.query(Users).filter(Users.id == data["funcionario_id"]).first()
 
-        admissao = RegistryAdmissao(prazo=data["prazo"])
+        admissao = RegistryAdmissao(
+            prazo=data["prazo"],
+            data_solicitacao=datetime.now(pytz.timezone("America/Manaus")),
+        )
         admissao.funcionario = funcionario
 
         contrato = RegistryContrato(
