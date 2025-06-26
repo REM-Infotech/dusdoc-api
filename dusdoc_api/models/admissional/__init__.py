@@ -1,12 +1,12 @@
 # noqa: D104
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, LargeBinary, String
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, LargeBinary, String
 
 from dusdoc_api.app import db
 
 files = db.Table(
     "files",
     Column("file_id", Integer, ForeignKey("file.id"), primary_key=True),
-    Column("cached_form_id", Integer, ForeignKey("cached_form.id"), primary_key=True),
+    Column("form_admissional_id", Integer, ForeignKey("form_admissional.id"), primary_key=True),
 )
 
 
@@ -26,19 +26,31 @@ class RegistryContrato(db.Model):  # noqa: D101
     funcionario = db.relationship("Funcionarios", backref="registry_contrato")
 
 
-class FileModel(db.Model):  # noqa: D101
-    __tablename__ = "file"
+class FormAdmissional(db.Model):  # noqa: D101
+    __tablename__ = "form_admissional"
     id = Column(Integer, primary_key=True)
-    filename = Column(String)
-    blob = Column(LargeBinary)
+    submited = Column(Boolean)
+    nome = Column(String)
+    cpf = Column(String)
+    email = Column(String)
+    data_nascimento = Column(String)
+    telefone = Column(String)
+    endereco = Column(String)
+    complemento = Column(String)
+    cidade = Column(String)
+    cep = Column(String)
+    estado = Column(String)
+    genero = Column(String)
+    corRaca = Column(String)  # noqa: N815
+    grauEscolaridade = Column(String)  # noqa: N815
+    estadoCivil = Column(String)  # noqa: N815
+    numero_residencia = Column(String)
 
+    funcionario_id = Column(Integer, ForeignKey("funcionarios.id"))
+    funcionario = db.relationship("Funcionarios", backref="cache_form")
 
-class CacheForms(db.Model):  # noqa: D101
-    __tablename__ = "cached_form"
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
     files = db.relationship(
         "FileModel",
         secondary="files",
-        backref=db.backref("cached_form", lazy=True),
+        backref=db.backref("form", lazy=True),
     )
