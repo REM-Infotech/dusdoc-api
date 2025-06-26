@@ -9,6 +9,7 @@ from quart.views import MethodView
 from quart_jwt_extended import jwt_required
 from werkzeug.datastructures import CombinedMultiDict, FileStorage, MultiDict
 
+from dusdoc_api.models.admissional import RegistryAdmissao, RegistryContrato  # noqa: F401
 from dusdoc_api.models.users.funcionarios import Funcionarios as Users
 
 
@@ -24,6 +25,7 @@ class FuncionarioDict(TypedDict):  # noqa: D101
 class AdmissaoDict(TypedDict):  # noqa: D101
     prazo: datetime
     contrato: FileStorage
+    funcionario_id: str
 
 
 async def get_data() -> MultiDict:  # noqa: D103
@@ -47,7 +49,8 @@ class AdmissionalFormView(MethodView):  # noqa: D101
 
     @jwt_required
     async def post(self) -> Response:
-        data = dict(list(await get_data()))
+        data = await get_data()
+        data = dict(list(data.items()))
         data["prazo"] = datetime.strptime(data["prazo"], "%Y-%m-%d")
         data = AdmissaoDict(**data)
         print(data)

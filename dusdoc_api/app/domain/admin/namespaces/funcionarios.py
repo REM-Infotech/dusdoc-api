@@ -11,6 +11,7 @@ from tqdm import tqdm  # noqa: F401
 
 
 class ListagemFuncionarioDict(TypedDict):  # noqa: D101
+    id: str
     nome: str
     codigo: str
     email: str
@@ -39,7 +40,7 @@ class FuncionariosNamespace(Namespace):  # noqa: D101
 
         users = db.session.query(Users).all()
         data: list[ListagemFuncionarioDict] = [
-            ListagemFuncionarioDict(nome=user.nome, codigo=user.codigo, email=user.email) for user in users
+            ListagemFuncionarioDict(id=user.id, nome=user.nome, codigo=user.codigo, email=user.email) for user in users
         ]
 
         return data
