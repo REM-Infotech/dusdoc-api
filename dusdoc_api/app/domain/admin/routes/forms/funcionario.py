@@ -17,6 +17,7 @@ class FuncionarioDict(TypedDict):  # noqa: D101
     nome: str
     email: str
     cpf: str
+    codigo: str
     departamento: str
     cargo: str
     empresa: str
@@ -65,7 +66,7 @@ class AdmissionalFormView(MethodView):  # noqa: D101
             blob_doc=data["contrato"].stream.read(),
         )
         contrato.funcionario = funcionario
-
+        funcionario.status_admissao = "EM ANDAMENTO"
         db.session.add_all([admissao, contrato])
         db.session.commit()
 
@@ -86,7 +87,12 @@ class CadastroFuncionarioView(MethodView):  # noqa: D101
     async def post(self) -> Response:
         db: SQLAlchemy = current_app.extensions["sqlalchemy"]
 
-        data = FuncionarioDict(**(await get_data()))
+        cod = str(len(db.session.query(Users).all()) + 1).zfill(6)
+
+        data = await get_data()
+        data = dict(list(data.items()))
+        data["codigo"] = cod
+        data = FuncionarioDict(**data)
         funcionario = data.get("nome")
         cpf = data.get("cpf")
 

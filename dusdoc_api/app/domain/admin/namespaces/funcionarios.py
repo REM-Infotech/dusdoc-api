@@ -15,6 +15,7 @@ class ListagemFuncionarioDict(TypedDict):  # noqa: D101
     nome: str
     codigo: str
     email: str
+    status_admissao: str
 
 
 class FuncionariosNamespace(Namespace):  # noqa: D101
@@ -40,7 +41,14 @@ class FuncionariosNamespace(Namespace):  # noqa: D101
 
         users = db.session.query(Users).all()
         data: list[ListagemFuncionarioDict] = [
-            ListagemFuncionarioDict(id=user.id, nome=user.nome, codigo=user.codigo, email=user.email) for user in users
+            ListagemFuncionarioDict(
+                id=user.id,
+                nome=user.nome,
+                codigo=user.codigo,
+                email=user.email,
+                status_admissao=user.status_admissao,
+            )
+            for user in users
         ]
 
         return data
