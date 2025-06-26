@@ -1,5 +1,5 @@
 # noqa: D104
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, LargeBinary, String
+from sqlalchemy import JSON, Boolean, Column, DateTime, ForeignKey, Integer, LargeBinary, String
 
 from dusdoc_api.app import db
 
@@ -61,4 +61,8 @@ class FileModel(db.Model):  # noqa: D101
     __tablename__ = "file"
     id = Column(Integer, primary_key=True)
     filename = Column(String)
+    filetype = Column(String)
+    size = Column(Integer)
+    mimetype = Column(String)
+    mimetype_params = Column(JSON)
     blob = Column(LargeBinary)

@@ -28,7 +28,7 @@ async def register_api_funcionario(app: Quart) -> None:  # noqa: D103
     from .routes.forms.admissional import AdmissionalFormView
 
     form_admissional = AdmissionalFormView.as_view("AdmissionalForm", Users)
-    forms.add_url_rule("/admissional", view_func=form_admissional)
+    forms.add_url_rule("/admissional/<int:_id>", view_func=form_admissional)
 
 
 async def register_namespace_funcionario(io: SocketIO) -> None:  # noqa: D103

@@ -53,7 +53,7 @@ class FuncionarioDocsNamespace(Namespace):  # noqa: D101
                 extension_file="pdf",
             )
             for item in user
-            if not item.form_registry.submited
+            if not item.form_registry or (len(item.form_registry) > 0 and not item.form_registry[-1].submited)
         ]
 
         return dataReturn

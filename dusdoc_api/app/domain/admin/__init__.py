@@ -32,7 +32,7 @@ async def register_api_admin(app: Quart) -> None:  # noqa: D103
     from .routes.funcionario import AdmissionalFormView, CadastroFuncionarioView
 
     form_admissional = AdmissionalFormView.as_view("AdmissionalForm", Users)
-    forms.add_url_rule("/funcionario/admissional/<int:_id>", view_func=form_admissional)
+    forms.add_url_rule("/funcionario/admissional", view_func=form_admissional)
 
     form_cadastro_funcionario = CadastroFuncionarioView.as_view("CadastroFuncionarioView", Users)
     forms.add_url_rule("/funcionario/cadastro", view_func=form_cadastro_funcionario)

@@ -29,27 +29,40 @@ class AdmissionalFormView(MethodView):  # noqa: D101
             if isinstance(data, str):
                 data = json.loads(data)
 
+        data = dict(list(data.items()))
+        # Remove 'id' if present to avoid datatype mismatch
+        if isinstance(data, dict) and "id" in data:
+            data.pop("id")
+
         to_add = []
 
-        registryAdmissional = (  # noqa: N806
-            db.session.query(RegistryAdmissao)
-            .filter(
-                RegistryAdmissao.funcionario_id == _id,
+        with db.session.no_autoflush:
+            registryAdmissional = (  # noqa: N806
+                db.session.query(RegistryAdmissao)
+                .filter(
+                    RegistryAdmissao.funcionario_id == _id,
+                )
+                .first()
             )
-            .first()
-        )
 
-        newAdmissao = FormAdmissional(**data)  # noqa: N806
-        newAdmissao.submited = True
+            newAdmissao = FormAdmissional(**data)  # noqa: N806
+            newAdmissao.submited = True
 
-        for k, v in list(files.items()):
-            file_model = FileModel(filename=k, blob=v.stream.read())
-            to_add.append(file_model)
-            newAdmissao.files.append(file_model)
+            for k, v in list(files.items()):
+                file_model = FileModel(
+                    filename=k,
+                    blob=v.stream.read(),
+                    filetype=v.content_type,
+                    size=v.content_length,
+                    mimetype=v.mimetype,
+                    mimetype_params=v.mimetype_params,
+                )
+                to_add.append(file_model)
+                newAdmissao.files.append(file_model)
 
-        registryAdmissional.form_registry = newAdmissao
-        to_add.append(newAdmissao)
-        db.session.add_all(to_add)
-        db.session.commit()
+            newAdmissao.form_registry = registryAdmissional
+            to_add.append(newAdmissao)
+            db.session.add_all(to_add)
+            db.session.commit()
 
         return await make_response(jsonify(ok="ok"))
