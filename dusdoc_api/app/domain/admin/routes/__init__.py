@@ -5,8 +5,10 @@ from typing import TypedDict
 from uuid import uuid4
 
 from flask_sqlalchemy import SQLAlchemy
-from quart import current_app, jsonify, make_response, request
+from quart import Blueprint, current_app, jsonify, make_response, request
 from quart.views import MethodView
+
+admin = Blueprint("admin", __name__, url_prefix="/admin")
 
 
 class Funcionario(TypedDict):  # noqa: D101
@@ -39,11 +41,18 @@ class PainelFuncionario(MethodView):  # noqa: D101
         message = "Acesso Liberado! Foi enviado um E-mail com instruções enviado para o funcionário"
         if user.password:
             message = "Senha resetada! Foi enviado um E-mail com instruções enviado para o funcionário"
-        user.password = uuid4().hex[:8].upper()
 
+        senha = uuid4().hex[:4].upper()
+        user.senhacrip = senha
+        db.session.commit()
         return await make_response(
             jsonify(
                 message=message,
             ),
             200,
         )
+
+
+def registry_endpoint_admin() -> None:  # noqa: D103
+    form_admissional = PainelFuncionario.as_view("AdmissionalForm")
+    admin.add_url_rule("/acesso_app", view_func=form_admissional)

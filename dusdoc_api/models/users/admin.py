@@ -75,7 +75,7 @@ class Users(db.Model):
             senha_texto (str): Plain text password.
 
         """
-        self.password = bcrypt.hashpw(senha_texto.encode(), salt).decode("utf-8")
+        self.password = bcrypt.hashpw(senha_texto.encode(), salt=salt).decode("utf-8")
 
     def check_password(self, senha_texto_claro: str) -> bool:
         """

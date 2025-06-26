@@ -5,7 +5,7 @@ from quart import Blueprint, Response, jsonify, make_response, request  # noqa: 
 from quart_jwt_extended import create_access_token
 
 from dusdoc_api.app import app
-from dusdoc_api.models.users.admin import Users
+from dusdoc_api.models.users.funcionarios import Funcionarios as Users
 
 auth = Blueprint(__name__.replace(".", "_"), __name__, url_prefix="/auth_funcionario")
 

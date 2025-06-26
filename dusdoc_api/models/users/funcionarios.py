@@ -2,9 +2,12 @@
 
 # import pytz
 # datetime.now(pytz.timezone("Etc/GMT+4"))
+import bcrypt
 from sqlalchemy import Column, DateTime, Integer, LargeBinary, String
 
 from dusdoc_api.app import db
+
+salt = bcrypt.gensalt()
 
 
 class Funcionarios(db.Model):  # noqa: D101
@@ -28,6 +31,41 @@ class Funcionarios(db.Model):  # noqa: D101
     departamento = Column(String(length=64))
     empresa = Column(String(length=64))
     cpf = Column(String(length=14), unique=True)
+
+    @property
+    def senhacrip(self) -> any:
+        """
+        Get the encrypted password.
+
+        Returns:
+            str: The encrypted password.
+
+        """
+        return self.senhacrip
+
+    @senhacrip.setter
+    def senhacrip(self, senha_texto: str) -> None:
+        """
+        Encrypt and set the user’s password.
+
+        Args:
+            senha_texto (str): Plain text password.
+
+        """
+        self.password = bcrypt.hashpw(senha_texto.encode(), salt).decode("utf-8")
+
+    def check_password(self, senha_texto_claro: str) -> bool:
+        """
+        Check if the provided password matches the stored encrypted password.
+
+        Args:
+            senha_texto_claro (str): Plain text password.
+
+        Returns:
+            bool: True if valid, False otherwise.
+
+        """
+        return bcrypt.checkpw(senha_texto_claro.encode("utf-8"), self.password.encode("utf-8"))
 
 
 class Cargos(db.Model):  # noqa: D101
