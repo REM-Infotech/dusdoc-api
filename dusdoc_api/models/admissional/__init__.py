@@ -12,6 +12,7 @@ files = db.Table(
 
 class RegistryAdmissao(db.Model):  # noqa: D101
     id = Column(Integer, primary_key=True)
+    data_solicitacao = Column(DateTime, nullable=False)
     prazo = Column(DateTime, nullable=False)
     funcionario_id = Column(Integer, ForeignKey("funcionarios.id"))
     funcionario = db.relationship("Funcionarios", backref="registry_admissao")

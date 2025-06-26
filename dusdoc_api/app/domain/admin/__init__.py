@@ -27,7 +27,7 @@ async def register_api_admin(app: Quart) -> None:  # noqa: D103
     from dusdoc_api.models.users.admin import Users
 
     from .routes.forms import forms
-    from .routes.forms.funcionario import AdmissionalFormView, CadastroFuncionarioView
+    from .routes.funcionario import AdmissionalFormView, CadastroFuncionarioView
 
     form_admissional = AdmissionalFormView.as_view("AdmissionalForm", Users)
     forms.add_url_rule("/funcionario/admissional", view_func=form_admissional)
