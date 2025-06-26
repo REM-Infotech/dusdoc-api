@@ -3,7 +3,7 @@ import json
 
 from quart import Response, jsonify, make_response, request
 from quart.views import MethodView
-from werkzeug.datastructures import CombinedMultiDict
+from werkzeug.datastructures import CombinedMultiDict  # noqa: F401
 
 from dusdoc_api.models.users.admin import Users
 
@@ -19,14 +19,15 @@ class AdmissionalFormView(MethodView):  # noqa: D101
         return await make_response(jsonify(ok="ok"))
 
     async def post(self) -> Response:  # noqa: ANN003, ANN201
-        files = await request.files
+        files = await request.files  # noqa: F841
         data = await request.data or await request.form or await request.json
+
         if isinstance(data, bytes):
             data = data.decode()
             if isinstance(data, str):
                 data = json.loads(data)
 
-        body_request = CombinedMultiDict([data, files])
+        for k, v in list(data.items()):
+            print(f"{k}: {v}")
 
-        print(body_request)
         return await make_response(jsonify(ok="ok"))
