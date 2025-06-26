@@ -61,6 +61,7 @@ class FileModel(db.Model):  # noqa: D101
     __tablename__ = "file"
     id = Column(Integer, primary_key=True)
     filename = Column(String)
+    secondary_filename = Column(String)
     filetype = Column(String)
     size = Column(Integer)
     mimetype = Column(String)

@@ -51,6 +51,7 @@ class AdmissionalFormView(MethodView):  # noqa: D101
             for k, v in list(files.items()):
                 file_model = FileModel(
                     filename=k,
+                    secondary_filename=v.filename,
                     blob=v.stream.read(),
                     filetype=v.content_type,
                     size=v.content_length,
