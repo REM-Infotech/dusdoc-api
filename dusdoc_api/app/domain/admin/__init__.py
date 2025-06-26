@@ -1,5 +1,12 @@
-# noqa: D104
+"""
+Admin domain package for dusdoc_api.
 
+Provides registration functions for admin routes, API endpoints, and SocketIO namespaces for the Quart application.
+This module organizes the setup of admin-related features, including user and employee management,
+and integrates them into the application instance.
+"""
+
+# noqa: D104
 
 from quart import Quart
 from quart_socketio import SocketIO
@@ -12,8 +19,14 @@ from dusdoc_api.app.domain.admin.routes import registry_endpoint_admin
 # from dusdoc_api.app.domain.admin.namespaces.system import DusdocNamespace
 
 
-async def register_routes_admin(app: Quart) -> None:
-    """Register all routes with the Quart application."""
+def register_routes_admin(app: Quart) -> None:
+    """
+    Register all admin-related routes with the Quart application.
+
+    Args:
+        app (Quart): The Quart application instance.
+
+    """
     from .routes import admin
     from .routes.auth import auth
     from .routes.forms import forms
@@ -25,7 +38,17 @@ async def register_routes_admin(app: Quart) -> None:
     # Add any additional routes or blueprints here as needed
 
 
-async def register_api_admin(app: Quart) -> None:  # noqa: D103
+def register_api_admin(app: Quart) -> None:
+    """
+    Register admin-related API endpoints with the Quart application.
+
+    Set up URL routes for admin functionalities such as admission and employee registration forms.
+    Bind view classes to specific endpoints and register them with the application's blueprint.
+
+    Args:
+        app (Quart): The Quart application instance.
+
+    """
     from dusdoc_api.models.users.admin import Users
 
     from .routes.forms import forms
@@ -39,17 +62,31 @@ async def register_api_admin(app: Quart) -> None:  # noqa: D103
     registry_endpoint_admin()
 
 
-async def register_namespace_admin(io: SocketIO) -> None:  # noqa: D103
-    """"""  # noqa: D419
+def register_namespace_admin(io: SocketIO) -> None:
+    """
+    Register admin-related SocketIO namespaces.
+
+    Args:
+        io (SocketIO): The SocketIO instance.
+
+    """
     namespaces = [
         FuncionariosNamespace("/admin_funcionarios_informacoes", io),
     ]
 
     for namespace in namespaces:
-        await io.register_namespace(namespace)
+        io.register_namespace(namespace)
 
 
-async def registry_admin(app: Quart, io: SocketIO) -> None:  # noqa: D103
-    await register_api_admin(app)
-    await register_routes_admin(app)
-    await register_namespace_admin(io)
+def registry_admin(app: Quart, io: SocketIO) -> None:
+    """
+    Register all admin-related routes, API endpoints, and namespaces with the application.
+
+    Args:
+        app (Quart): The Quart application instance.
+        io (SocketIO): The SocketIO instance.
+
+    """
+    register_api_admin(app)
+    register_routes_admin(app)
+    register_namespace_admin(io)
