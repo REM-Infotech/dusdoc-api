@@ -54,8 +54,3 @@ class FuncionarioDocsNamespace(Namespace):  # noqa: D101
         ]
 
         return dataReturn
-        # path_parent = Path(__file__).cwd().joinpath("dusdoc_api", "examples", "example_solicitados.json")
-        # async with aiofiles.open(str(path_parent), "r", encoding="utf-8") as f:
-        #     readfile = await f.read()
-        #     data = json.loads(readfile)
-        #     return data
