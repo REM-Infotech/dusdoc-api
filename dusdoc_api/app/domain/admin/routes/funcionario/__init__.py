@@ -8,6 +8,8 @@ from werkzeug.datastructures import CombinedMultiDict, FileStorage, MultiDict
 
 
 class FuncionarioDict(TypedDict):  # noqa: D101
+    id: str
+
     nome: str
     email: str
     cpf: str

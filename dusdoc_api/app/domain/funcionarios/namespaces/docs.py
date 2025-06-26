@@ -4,17 +4,12 @@
 # from quart.datastructures import FileStorage
 import json
 from pathlib import Path
-from typing import TypedDict
 
 import aiofiles
 from flask_sqlalchemy import SQLAlchemy
 from quart import current_app, request
 from quart_jwt_extended import jwt_required  # noqa: F401
 from quart_socketio import Namespace
-
-
-class FuncionarioDict(TypedDict):  # noqa: D101
-    id: str
 
 
 class FuncionarioDocsNamespace(Namespace):  # noqa: D101
@@ -28,7 +23,7 @@ class FuncionarioDocsNamespace(Namespace):  # noqa: D101
     async def on_solicitados(self) -> list[dict[str, str]]:
         from dusdoc_api.models.users.funcionarios import Funcionarios
 
-        data = FuncionarioDict(**dict(list(request.socket_data.items())))
+        data = request.socket_data
         db: SQLAlchemy = current_app.extensions["sqlalchemy"]
         user = db.session.query(Funcionarios).filter(Funcionarios.id == data["id"]).first()  # noqa: F841
         path_parent = Path(__file__).cwd().joinpath("dusdoc_api", "examples", "example_solicitados.json")
