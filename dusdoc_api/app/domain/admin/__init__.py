@@ -19,7 +19,7 @@ from dusdoc_api.app.domain.admin.routes import registry_endpoint_admin
 # from dusdoc_api.app.domain.admin.namespaces.system import DusdocNamespace
 
 
-def register_routes_admin(app: Quart) -> None:
+async def register_routes_admin(app: Quart) -> None:
     """
     Register all admin-related routes with the Quart application.
 
@@ -38,7 +38,7 @@ def register_routes_admin(app: Quart) -> None:
     # Add any additional routes or blueprints here as needed
 
 
-def register_api_admin(app: Quart) -> None:
+async def register_api_admin(app: Quart) -> None:
     """
     Register admin-related API endpoints with the Quart application.
 
@@ -62,7 +62,7 @@ def register_api_admin(app: Quart) -> None:
     registry_endpoint_admin()
 
 
-def register_namespace_admin(io: SocketIO) -> None:
+async def register_namespace_admin(io: SocketIO) -> None:
     """
     Register admin-related SocketIO namespaces.
 
@@ -75,10 +75,10 @@ def register_namespace_admin(io: SocketIO) -> None:
     ]
 
     for namespace in namespaces:
-        io.register_namespace(namespace)
+        await io.register_namespace(namespace)
 
 
-def registry_admin(app: Quart, io: SocketIO) -> None:
+async def registry_admin(app: Quart, io: SocketIO) -> None:
     """
     Register all admin-related routes, API endpoints, and namespaces with the application.
 
@@ -87,6 +87,6 @@ def registry_admin(app: Quart, io: SocketIO) -> None:
         io (SocketIO): The SocketIO instance.
 
     """
-    register_api_admin(app)
-    register_routes_admin(app)
-    register_namespace_admin(io)
+    await register_api_admin(app)
+    await register_routes_admin(app)
+    await register_namespace_admin(io)
