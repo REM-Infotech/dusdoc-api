@@ -1,14 +1,20 @@
 # noqa: D104
 
 import json
+from pathlib import Path
 from typing import TypedDict
 from uuid import uuid4
 
+from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
+from jinja2 import Environment, FileSystemLoader
 from quart import Blueprint, current_app, jsonify, make_response, request
 from quart.views import MethodView
 
 admin = Blueprint("admin", __name__, url_prefix="/admin")
+environment = Environment(
+    loader=FileSystemLoader(Path(__file__).cwd().joinpath("dusdoc_api", "jinja")), autoescape=True
+)
 
 
 class Funcionario(TypedDict):  # noqa: D101
@@ -26,6 +32,7 @@ class PainelFuncionario(MethodView):  # noqa: D101
     async def post(self) -> None:
         from dusdoc_api.models.users.funcionarios import Funcionarios as Users
 
+        mail: Mail = current_app.extensions["mail"]
         db: SQLAlchemy = current_app.extensions["sqlalchemy"]
 
         data = await request.data or await request.form or await request.json
@@ -44,6 +51,15 @@ class PainelFuncionario(MethodView):  # noqa: D101
 
         senha = uuid4().hex[:4].upper()
         user.senhacrip = senha
+
+        template_file = environment.get_template("password.jinja")
+        rendered_template = template_file.render(user_name=user.nome, user_password=senha)
+
+        msg = Message()
+        msg.subject = "Acesso ao Sistema"
+        msg.recipients = [user.email]
+        msg.html = rendered_template
+        mail.send(msg)
 
         db.session.commit()
         return await make_response(

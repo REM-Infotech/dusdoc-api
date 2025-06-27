@@ -2,6 +2,7 @@ import re  # noqa: D104
 from pathlib import Path
 
 import quart_flask_patch  # noqa: F401
+from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from quart import Quart, Response  # noqa: F401
 from quart_cors import cors
@@ -15,8 +16,8 @@ app = Quart(__name__)
 jwt = JWTManager(app)
 io = SocketIO()
 db = SQLAlchemy()
-
-
+mail = Mail()
+mail_ = None
 # @app.after_request
 # async def allow_origin(response: Response) -> Response:  # noqa: ANN202, D103
 #     response.headers["Access-Control-Allow-Origin"] = "*"
@@ -40,6 +41,9 @@ async def create_app() -> Quart:  # noqa: D103
         await io.init_app(app, cors_allowed_origins=cors_allowed_origins)
         await register_quart(app, io)
         await init_database(app)
+        global mail_
+        mail_ = mail.init_app(app)
+        mail_.connect()
 
     app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
     return cors(

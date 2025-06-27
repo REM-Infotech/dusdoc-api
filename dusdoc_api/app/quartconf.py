@@ -6,12 +6,24 @@ import secrets
 from datetime import timedelta
 from os import environ
 from pathlib import Path
+from typing import TypedDict
 
 from dotenv import load_dotenv
 
 load_dotenv(str(Path(__file__).cwd().joinpath("api", ".env")))
 
 env = environ
+
+
+class _MailDict(TypedDict):  # noqa: D101
+    MAIL_SERVER: str
+    MAIL_PORT: int
+    MAIL_USE_TLS: str
+    MAIL_USE_SSL: str
+    MAIL_USERNAME: str
+    MAIL_PASSWORD: str
+    MAIL_DEFAULT_SENDER: str
+
 
 WITH_REDIS = env.get("WITH_REDIS", "false").lower() == "true"
 LOG_LEVEL = logging.INFO
@@ -67,3 +79,15 @@ JWT_COOKIE_CSRF_PROTECT = True
 JWT_BLACKLIST_ENABLED = True
 JWT_ACCESS_CSRF_HEADER_NAME = "X-Xsrf-Token"
 JWT_ACCESS_CSRF_COOKIE_NAME = "X-Xsrf-Token"
+
+
+config_mail = _MailDict(**env)
+
+
+MAIL_SERVER = config_mail["MAIL_SERVER"]
+MAIL_PORT = config_mail["MAIL_PORT"]
+MAIL_USE_TLS = config_mail["MAIL_USE_TLS"].lower() == "true"
+MAIL_USE_SSL = config_mail["MAIL_USE_SSL"].lower() == "true"
+MAIL_USERNAME = config_mail["MAIL_USERNAME"]
+MAIL_PASSWORD = config_mail["MAIL_PASSWORD"]
+MAIL_DEFAULT_SENDER = config_mail["MAIL_DEFAULT_SENDER"]
