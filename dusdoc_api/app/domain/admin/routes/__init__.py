@@ -53,7 +53,7 @@ class PainelFuncionario(MethodView):  # noqa: D101
         user.senhacrip = senha
 
         template_file = environment.get_template("password.jinja")
-        rendered_template = template_file.render(user_name=user.nome, user_password=senha)
+        rendered_template = template_file.render(user_name=user.nome, user_password=senha, empresa=user.empresa)
 
         msg = Message()
         msg.subject = f"Acesso ao Sistema <{current_app.config['MAIL_DEFAULT_SENDER']}>"
