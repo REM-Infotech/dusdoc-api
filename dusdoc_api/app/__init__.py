@@ -1,8 +1,10 @@
 import re  # noqa: D104
+from os import environ
 from pathlib import Path
 
 import quart_flask_patch  # noqa: F401
 from flask_mail import Mail
+from flask_migrate import Migrate, init, migrate, upgrade
 from flask_sqlalchemy import SQLAlchemy
 from quart import Quart, Response  # noqa: F401
 from quart_cors import cors
@@ -17,6 +19,7 @@ jwt = JWTManager(app)
 io = SocketIO()
 db = SQLAlchemy()
 mail = Mail()
+migrate_ = Migrate()
 mail_ = None
 # @app.after_request
 # async def allow_origin(response: Response) -> Response:  # noqa: ANN202, D103
@@ -44,6 +47,14 @@ async def create_app() -> Quart:  # noqa: D103
         global mail_
         mail_ = mail.init_app(app)
         mail_.connect()
+        migrate_.init_app(app, db)
+
+        if environ.get("MIGRATE").lower() == "true":
+            if not Path(__file__).cwd().joinpath("migrations").exists():
+                init(directory="migrations")
+
+            migrate(directory="migrations", message="Initial migration")
+            upgrade(directory="migrations")
 
     app.asgi_app = ProxyHeadersMiddleware(app.asgi_app)
     return cors(
