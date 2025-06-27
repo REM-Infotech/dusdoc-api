@@ -55,11 +55,14 @@ class PainelFuncionario(MethodView):  # noqa: D101
         template_file = environment.get_template("password.jinja")
         rendered_template = template_file.render(user_name=user.nome, user_password=senha, empresa=user.empresa)
 
-        msg = Message()
-        msg.subject = f"Acesso ao Sistema <{current_app.config['MAIL_DEFAULT_SENDER']}>"
-        msg.recipients = [user.email]
-        msg.html = rendered_template
-        mail.send(msg)
+        mail.send(
+            Message(
+                subject="Senha de Acesso ao App DusDoc",
+                sender=f"Mensagem do Sistema <{current_app.config['MAIL_DEFAULT_SENDER']}>",
+                recipients=[user.email],
+                html=rendered_template,
+            )
+        )
 
         db.session.commit()
         return await make_response(
