@@ -56,7 +56,7 @@ class PainelFuncionario(MethodView):  # noqa: D101
         rendered_template = template_file.render(user_name=user.nome, user_password=senha)
 
         msg = Message()
-        msg.subject = "Acesso ao Sistema"
+        msg.subject = f"Acesso ao Sistema <{current_app.config['MAIL_DEFAULT_SENDER']}>"
         msg.recipients = [user.email]
         msg.html = rendered_template
         mail.send(msg)
